@@ -151,9 +151,9 @@ if __name__ == "__main__":
             edges = edges.append({'from': addr, 'to': ctr, 'times': times}, ignore_index=True)
     
             ind = addrs[addrs['address']==addr].index
-            if ind.size == 0:
+            if len(ind) == 0:
                 resnr = nrs[nrs['address']==addr].index
-                if resnr.size == 0:
+                if len(resnr) == 0:
                     addrs = addrs.append({'address': addr, 'nr': 0.0, 'times': times}, ignore_index=True)
                 else:
                     addrs = addrs.append({'address': addr, 'nr': nrs.loc[resnr[0],'score'], 'times': times}, ignore_index=True)
