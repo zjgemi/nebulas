@@ -146,7 +146,7 @@ if __name__ == "__main__":
         tos = calls[calls['to'] == ctr]
         froms = set(tos['from'])
         for addr in froms:
-            times = tos[tos['from']==addr].size
+            times = len(tos[tos['from']==addr])
     
             edges = edges.append({'from': addr, 'to': ctr, 'times': times}, ignore_index=True)
     
