@@ -1,5 +1,3 @@
-import httplib
-import json
 import sys
 import matplotlib
 matplotlib.use("Agg")
@@ -7,61 +5,17 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import datetime
 import pandas as pd
-
-def get_nr_by_day(date):
-
-    host = "111.203.228.11:9973"
-    conn = httplib.HTTPConnection(host)
-
-    while(True):
-        conn.request(method="GET",url="http://"+host+"/nr?db=nebulas&date="+date)
-        try:
-            response = conn.getresponse()
-            res = response.read()
-            obj = json.loads(res)
-        except:
-            print("respose")
-            print(response)
-            print("res")
-            print(res)
-            time.sleep(1)
-            continue
-        break
-
-    nrs = pd.DataFrame(columns=["address", "score"])
-
-    for res in obj["result"]:
-        nrs = nrs.append({"address": res["address"], "score": res["score"]}, ignore_index=True)
-
-    getid = obj["id"]
-
-    while(obj["has_more"]):
-        conn.request(method="GET",url="http://"+host+"/cursor?db=nebulas&id="+getid)
-        try:
-            response = conn.getresponse()
-            res = response.read()
-            obj = json.loads(res)
-        except:
-            print("respose")
-            print(response)
-            print("res")
-            print(res)
-            time.sleep(1)
-            continue
-        for res in obj["result"]:
-            nrs = nrs.append({"address": res["address"], "score": res["score"]}, ignore_index=True)
-
-    return nrs
+from getnr import get_nr_by_day
 
 if __name__ == "__main__":
 
     if len(sys.argv) < 3:
         raise ValueError("Missing date value")
-    start_date = sys.argv[1]
-    end_date = sys.argv[2]
+    start_sdate = sys.argv[1]
+    end_sdate = sys.argv[2]
     try:
-        date = datetime.datetime.strptime(start_date,"%Y%m%d")
-        enddate = datetime.datetime.strptime(end_date,"%Y%m%d")
+        start_date = datetime.datetime.strptime(start_sdate,"%Y%m%d")
+        end_date = datetime.datetime.strptime(end_sdate,"%Y%m%d")
     except:
         raise ValueError("Wrong date value")
 
@@ -71,7 +25,8 @@ if __name__ == "__main__":
     ratio = pd.DataFrame(columns=["date"]+names+["totnr"])
     dates = []
     print("Requesting NRs..")
-    while date <= enddate:
+    date = start_date
+    while date <= end_date:
         sdate = date.strftime("%Y%m%d")
         print(sdate)
         ratio = ratio.append({"date": sdate}, ignore_index=True)
@@ -101,7 +56,7 @@ if __name__ == "__main__":
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%m%d"))
     plt.xlabel("Date")
     plt.ylabel("NR ratio")
-    plt.savefig("NR_"+start_date+"_"+end_date+".png")
+    plt.savefig("NR_"+start_sdate+"_"+end_sdate+".png")
     plt.close()
 
-    ratio.to_csv("ratio_"+start_date+"_"+end_date+".csv",sep=",",index=False)
+    ratio.to_csv("ratio_"+start_sdate+"_"+end_sdate+".csv",sep=",",index=False)
