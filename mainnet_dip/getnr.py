@@ -1,6 +1,7 @@
 import httplib
 import json
 import pandas as pd
+import time
 
 def get_nr_by_week(date):
 
