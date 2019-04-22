@@ -1,0 +1,64 @@
+import sys
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import datetime, time
+import pandas as pd
+from getnr import get_nr_by_week
+from gettxs import get_txs
+
+def datetime_to_timestamp(dt):
+    t = dt.timetuple()
+    ts = int(time.mktime(t)) - time.timezone
+    return ts
+
+if __name__ == "__main__":
+
+    if len(sys.argv) < 3:
+        raise ValueError("Missing date value")
+    start_sdate = sys.argv[1]
+    end_sdate = sys.argv[2]
+    try:
+        start_date = datetime.datetime.strptime(start_sdate,"%Y%m%d")
+        end_date = datetime.datetime.strptime(end_sdate,"%Y%m%d")
+    except:
+        raise ValueError("Wrong date value")
+    
+    dates = []
+    txval = pd.DataFrame(columns=["date","nr","txval"])
+    print("Requesting NRs & txs..")
+    delta = start_date - datetime.datetime.strptime("20190422","%Y%m%d")
+    date = start_date - datetime.timedelta(days=delta.days%7)
+
+    while date <= end_date:
+        sdate = date.strftime("%Y%m%d")+"-"+(date+datetime.timedelta(days=7)).strftime("%Y%m%d")
+        print(sdate)
+        nrs = get_nr_by_week(sdate)
+        totnr = sum(nrs["score"])
+
+        start_ts = datetime_to_timestamp(date)
+        end_ts = datetime_to_timestamp(date+datetime.timedelta(days=7))
+        txs = get_txs(start_ts,end_ts)
+        totval = sum(txs["tx_value"])
+        txval = txval.append({"date": sdate, "nr": totnr, "txval": totval}, ignore_index=True)
+        
+        dates.append(date+datetime.timedelta(days=7))
+        date += datetime.timedelta(days=7)
+    
+    print("Ploting..")
+    plt.plot(dates, txval['nr'], color='#000000', label='Total NR')
+    plt.legend(loc='upper left')
+    plt.xlabel('Date')
+    plt.ylabel('Total NR')
+    plt.yscale('log')
+    ax2 = plt.twinx()
+    ax2.plot(dates, txval['txval'], color='#FF0000', label='Total transaction value')
+    ax2.legend(loc='upper right')
+    ax2.set_ylabel('Total transaction value')
+    ax2.set_yscale('log')
+    ax2.xaxis.set_major_formatter(mdates.DateFormatter('%y%m%d'))
+    plt.savefig('tx_val_'+start_sdate+"_"+end_sdate+'.png')
+    plt.close()
+
+    txval.to_csv("tx_val_"+start_sdate+"_"+end_sdate+".csv",sep=",",index=False)
