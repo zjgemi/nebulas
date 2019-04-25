@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import datetime, time
 import pandas as pd
-from getnr import get_nr_by_day
+from getnr import get_nr_by_week
 from gettxs import get_txs
 
 def datetime_to_timestamp(dt):
@@ -26,37 +26,39 @@ if __name__ == "__main__":
         raise ValueError("Wrong date value")
     
     dates = []
-    txval = pd.DataFrame(columns=["date","nr","txval"])
+    totval = pd.DataFrame(columns=["date","nr","txval"])
     print("Requesting NRs & txs..")
-    date = start_date
+    delta = start_date - datetime.datetime.strptime("20190422","%Y%m%d")
+    date = start_date - datetime.timedelta(days=delta.days%7)
+
     while date <= end_date:
-        sdate = date.strftime("%Y%m%d")
+        sdate = date.strftime("%Y%m%d")+"-"+(date+datetime.timedelta(days=7)).strftime("%Y%m%d")
         print(sdate)
-        nrs = get_nr_by_day(sdate)
+        nrs = get_nr_by_week(sdate)
         totnr = sum(nrs["score"])
 
         start_ts = datetime_to_timestamp(date)
-        end_ts = datetime_to_timestamp(date+datetime.timedelta(days=1))
+        end_ts = datetime_to_timestamp(date+datetime.timedelta(days=7))
         txs = get_txs(start_ts,end_ts)
-        totval = sum(txs["tx_value"])
-        txval = txval.append({"date": sdate, "nr": totnr, "txval": totval}, ignore_index=True)
+        txval = sum(txs["tx_value"])
+        totval = totval.append({"date": sdate, "nr": totnr, "txval": txval}, ignore_index=True)
         
-        dates.append(date)
-        date += datetime.timedelta(days=1)
+        dates.append(date+datetime.timedelta(days=7))
+        date += datetime.timedelta(days=7)
     
     print("Ploting..")
-    plt.plot(dates, txval['nr'], color='#000000', label='Total NR')
+    plt.plot(dates, totval['nr'], color='#000000', label='Total NR')
     plt.legend(loc='upper left')
     plt.xlabel('Date')
     plt.ylabel('Total NR')
     plt.yscale('log')
     ax2 = plt.twinx()
-    ax2.plot(dates, txval['txval'], color='#FF0000', label='Total transaction value')
+    ax2.plot(dates, totval['txval'], color='#FF0000', label='Total transaction value')
     ax2.legend(loc='upper right')
     ax2.set_ylabel('Total transaction value')
     ax2.set_yscale('log')
     ax2.xaxis.set_major_formatter(mdates.DateFormatter('%y%m%d'))
-    plt.savefig('tx_val_'+start_sdate+"_"+end_sdate+'.png')
+    plt.savefig('tot_val_'+start_sdate+"_"+end_sdate+'.png')
     plt.close()
 
-    txval.to_csv("tx_val_"+start_sdate+"_"+end_sdate+".csv",sep=",",index=False)
+    totval.to_csv("tot_val_"+start_sdate+"_"+end_sdate+".csv",sep=",",index=False)
