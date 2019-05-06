@@ -43,7 +43,7 @@ if __name__ == "__main__":
             ratio.loc[i,name] = nr
         totnr = sum(nrs["score"])
         ratio.loc[i,"totnr"] = totnr
-        dates.append(date)
+        dates.append(date + datetime.timedelta(days=3))
         date += datetime.timedelta(days=7)
     
     print("Ploting..")
@@ -52,6 +52,7 @@ if __name__ == "__main__":
         plt.bar(dates, ratio[name]/ratio["totnr"], width=6, bottom=bottom, label=name)
         bottom += ratio[name]/ratio["totnr"]
     plt.legend(bbox_to_anchor=(1.0, 1.0))
+    plt.ylim(0.0,1.0)
     ax = plt.gca()
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width*0.8 , box.height])

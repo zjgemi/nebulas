@@ -49,7 +49,9 @@ if __name__ == "__main__":
     for name in names:
         plt.bar(dates, ratio[name]/ratio["totnr"], bottom=bottom, label=name)
         bottom += ratio[name]/ratio["totnr"]
+    print bottom
     plt.legend(bbox_to_anchor=(1.0, 1.0))
+    plt.ylim(0.0,1.0)
     ax = plt.gca()
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width*0.8 , box.height])
