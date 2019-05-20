@@ -9,7 +9,7 @@ def get_nr_by_week(date):
     conn = httplib.HTTPConnection(host)
 
     while(True):
-        conn.request(method="GET",url="http://"+host+"/keyset?db=nebulas&collection=nr_week&field=date")
+        conn.request(method="GET",url="http://"+host+"/keyset?db=nebulas&collection=nr_7&field=date")
         try:
             response = conn.getresponse()
             res = response.read()
@@ -26,7 +26,7 @@ def get_nr_by_week(date):
         raise ValueError("Date value not in the list")
 
     while(True):
-        conn.request(method="GET",url="http://"+host+"/nr?date="+date+"&db=nebulas&collection=nr_week")
+        conn.request(method="GET",url="http://"+host+"/nr?date="+date+"&db=nebulas&collection=nr_7")
         try:
             response = conn.getresponse()
             res = response.read()
