@@ -29,14 +29,18 @@ if __name__ == "__main__":
 
     nat = pd.DataFrame(columns=["address", "nr", "nat", "affiliation"])
     nr_e = 0.0
+    ne = 0
+    nne = 0
     for i in nrs.index:
         addr = nrs.loc[i,"address"]
         nr = nrs.loc[i,"score"]
         if addr in addrs:
             ind = addrs.index(addr)
             nr_e += nr
+            if nr != 0.0: ne += 1
             nat = nat.append({"address": addr, "nr": nr, "affiliation": names[ind]}, ignore_index=True)
         else:
+            if nr != 0.0: nne += 1
             nat = nat.append({"address": addr, "nr": nr}, ignore_index=True)
 
     nr_tot = sum(nrs["score"])
@@ -49,9 +53,11 @@ if __name__ == "__main__":
 
     for i in nat.index:
         nat.loc[i,"nat"] = z*nat.loc[i,"nr"]*lam**iweek
-    nat = nat.sort_values(by="nr",ascending=False)
+    nat = nat.sort_values(by=["nr","address"],ascending=False)
     nat.to_csv("nat_nr_"+date+".csv",sep=",",index=False)
     print "Addresses eligible for NAT (NR portion):", len(nat[nat["nat"]!=0.0])
+    print "Exchange addresses:", ne
+    print "Non-exchange addresses:", nne
     print "Total NAT issued (NR portion):", sum(nat["nat"])
     print "For exchange addresses:", z*nr_e*lam**iweek
     print "For non-exchange addresses:", z*nr_ne*lam**iweek
