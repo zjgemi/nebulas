@@ -28,7 +28,6 @@ if __name__ == "__main__":
     nat = pd.DataFrame(columns=["address", "nas", "nat"])
     ntp = 0
     ntr = 0
-    nti = 0
 
     start_ts = datetime_to_timestamp(start_date) + 3600*4
     end_ts = datetime_to_timestamp(end_date) + 3600*4
@@ -48,8 +47,6 @@ if __name__ == "__main__":
             if len(ind) != 0:
                 nat = nat.drop(ind)
             ntr += 1
-        else:
-            nti += 1
 
     start_ts = datetime_to_timestamp(start_date) + 3600*4
     end_ts = datetime_to_timestamp(end_date) + 3600*4
@@ -71,13 +68,10 @@ if __name__ == "__main__":
             if len(ind) != 0:
                 nat = nat.drop(ind)
             ntr += 1
-        else:
-            nti += 1
 
-    print "Total transactions in this interval:", ntp + ntr + nti
+    print "Total transactions in this interval:", ntp + ntr
     print "Pledge transactions in this interval:", ntp
     print "Redeeming transactions in this interval:", ntr
-    print "Invalid transactions in this interval:", nti
     print "New pledge NAS:", sum(nat["nas"])
     print "New addresses pledged:", len(nat)
 
