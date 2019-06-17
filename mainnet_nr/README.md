@@ -12,7 +12,7 @@ or
 ```bash
 python plot_nr_bar_by_week.py 20190301 20190331
 ```
-You can modify the list of selected addresses in the code.
+You can modify the list of selected addresses in the codes.
 
 ## Plot total tx_value and total NR
 
