@@ -29,10 +29,10 @@ python stat_pledge.py 20190527 20190603
 
 ## Parse results
 
-Parse the onchain results of NAT distributing (NR and pledge portions).
+Parsing the onchain results of NAT distributing (NR and pledge portions).
 An example Python code `parse_results.py` is provided.
 One can run the code by passing a week in the form of `YYYYmmdd-YYYYmmdd` as the commandline argument, e.g.
 ```bash
-python parse_results.py 20190603 20190610
+python parse_results.py 20190603-20190610
 ```
 
