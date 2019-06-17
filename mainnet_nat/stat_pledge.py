@@ -29,8 +29,8 @@ if __name__ == "__main__":
     ntp = 0
     ntr = 0
 
-    start_ts = datetime_to_timestamp(start_date) - 3600*5 + 60*27
-    end_ts = datetime_to_timestamp(end_date) - 3600*5 + 60*27
+    start_ts = datetime_to_timestamp(start_date) + 3600*4
+    end_ts = datetime_to_timestamp(end_date) + 3600*4
     txs = get_txs_addr(pledge1,start_ts,end_ts)
     txs = txs.sort_values(by="timestamp")
     ind = txs[(txs["to"]=="n1LEdnBHdhZYaacnCmmiWRKvgPAiCdPZUsX") & (txs["timestamp"]=="1557710010")].index
@@ -48,8 +48,8 @@ if __name__ == "__main__":
                 nat = nat.drop(ind)
             ntr += 1
 
-    start_ts = datetime_to_timestamp(start_date) - 3600*5 + 60*27
-    end_ts = datetime_to_timestamp(end_date) - 3600*5 + 60*27
+    start_ts = datetime_to_timestamp(start_date) + 3600*4
+    end_ts = datetime_to_timestamp(end_date) + 3600*4
     txs = get_txs_addr(pledge2,start_ts,end_ts)
     txs = txs.sort_values(by="timestamp")
     ind = txs[(txs["from"]=="n1LEdnBHdhZYaacnCmmiWRKvgPAiCdPZUsX") & (txs["timestamp"]=="1557712830")].index

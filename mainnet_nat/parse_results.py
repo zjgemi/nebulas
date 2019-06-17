@@ -80,11 +80,11 @@ if __name__ == "__main__":
     nr.to_csv("nr_result_"+date+".csv",sep=",",index=False)
 
     print "Addresses eligible for NAT (NR portion):", len(nr[nr["nat"]!=0.0])
-    print "Exchange addresses:", ne
-    print "Non-exchange addresses:", nne
     print "Total NAT issued (NR portion):", sum(nr["nat"])
     print "For exchange addresses:", nat_e
     print "For non-exchange addresses:", nat_ne
+    print "Exchange addresses:", ne
+    print "Non-exchange addresses:", nne
     print 
 
     pledge = pledge.sort_values(by=["nas","address"],ascending=False)

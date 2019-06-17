@@ -34,7 +34,7 @@ if __name__ == "__main__":
     nat = pd.DataFrame(columns=["address", "nas", "nat"])
 
     start_ts = datetime_to_timestamp(datetime.datetime.strptime("20190504","%Y%m%d"))
-    end_ts = datetime_to_timestamp(start_date) - 3600*5 + 60*27
+    end_ts = datetime_to_timestamp(start_date) + 3600*4
     txs = get_txs_addr(pledge1,start_ts,end_ts)
     txs = txs.sort_values(by="timestamp")
     ind = txs[(txs["to"]=="n1LEdnBHdhZYaacnCmmiWRKvgPAiCdPZUsX") & (txs["timestamp"]=="1557710010")].index
@@ -51,7 +51,7 @@ if __name__ == "__main__":
                 nat = nat.drop(ind)
 
     start_ts = datetime_to_timestamp(datetime.datetime.strptime("20190513","%Y%m%d"))
-    end_ts = datetime_to_timestamp(start_date) - 3600*5 + 60*27
+    end_ts = datetime_to_timestamp(start_date) + 3600*4
     txs = get_txs_addr(pledge2,start_ts,end_ts)
     txs = txs.sort_values(by="timestamp")
     ind = txs[(txs["from"]=="n1LEdnBHdhZYaacnCmmiWRKvgPAiCdPZUsX") & (txs["timestamp"]=="1557712830")].index
@@ -67,8 +67,8 @@ if __name__ == "__main__":
             if len(ind) != 0:
                 nat = nat.drop(ind)
 
-    start_ts = datetime_to_timestamp(start_date) - 3600*5 + 60*27
-    end_ts = datetime_to_timestamp(end_date) - 3600*5 + 60*27
+    start_ts = datetime_to_timestamp(start_date) + 3600*4
+    end_ts = datetime_to_timestamp(end_date) + 3600*4
     txs2 = get_txs_addr(pledge1,start_ts,end_ts)
     txs2 = txs2.sort_values(by="timestamp")
     ind = txs2[(txs2["to"]=="n1LEdnBHdhZYaacnCmmiWRKvgPAiCdPZUsX") & (txs2["timestamp"]=="1557710010")].index
@@ -80,8 +80,8 @@ if __name__ == "__main__":
             if len(ind) != 0:
                 nat = nat.drop(ind)
 
-    start_ts = datetime_to_timestamp(start_date) - 3600*5 + 60*27
-    end_ts = datetime_to_timestamp(end_date) - 3600*5 + 60*27
+    start_ts = datetime_to_timestamp(start_date) + 3600*4
+    end_ts = datetime_to_timestamp(end_date) + 3600*4
     txs2 = get_txs_addr(pledge2,start_ts,end_ts)
     txs2 = txs2.sort_values(by="timestamp")
     ind = txs2[(txs2["from"]=="n1LEdnBHdhZYaacnCmmiWRKvgPAiCdPZUsX") & (txs2["timestamp"]=="1557712830")].index
