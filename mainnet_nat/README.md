@@ -36,3 +36,12 @@ One can run the code by passing a week in the form of `YYYYmmdd-YYYYmmdd` as the
 python parse_results.py 20190603-20190610
 ```
 
+## Voting incentive portion
+
+Analyzing the onchain result of NAT distributing (voting incentive portion).
+An example Python code `nat_voting.py` is provided.
+One can run the code by passing the week of voting in the form of `YYYYmmdd-YYYYmmdd` as the commandline argument, e.g.
+```bash
+python nat_voting.py 20190506-20190513
+```
+
